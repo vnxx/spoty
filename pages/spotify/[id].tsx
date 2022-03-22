@@ -55,7 +55,6 @@ export default function SpotifyShow() {
 
 	const handleDelete = async () => {
 		setDeleting(true)
-		console.log('delete: ' + selectedTrack?.track.id)
 		fetch(`/api/spotify/playlists/${id}?trackURI=${selectedTrack?.track.uri}`, {
 			method: 'DELETE',
 		})

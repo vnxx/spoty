@@ -17,10 +17,12 @@ export default async function handler(
 					}]
 				}
 			}).then(data => {
-				res.status(data.error ? data.error.status : 200).json(data)
-			}).catch(error => {
-				res.status(500).json(error)
+				res.status(data.error ? data.error.status : 200).json({
+					status: data.error ? data.error.status : 200,
+					...data
+				})
 			})
+			break
 
 		default:
 			apiFetch(req, `/playlists/${req.query.id}`).then(data => {

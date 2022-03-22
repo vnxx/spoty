@@ -37,7 +37,7 @@ export default async function handler(
 		}).then(response => response.json()).then(data => {
 			setCookie(res, 'refresh_token', data.refresh_token)
 
-			res.redirect(307, '/').end(res.getHeader('Set-Cookie'))
+			res.redirect(307, '/')
 
 		}).catch(error => {
 			res.status(500).json(error)

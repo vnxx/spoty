@@ -43,8 +43,12 @@ export default function Home() {
             {playlists.items.map((item, i) => (
               <Link key={i} href={`/spotify/${item.id}`} >
                 <Box cursor={'pointer'}>
-                  <AspectRatio mb={2} ratio={1 / 1}>
-                    <Image alt={item.name} src={item.images[0].url} objectFit='cover' />
+                  <AspectRatio mb={2} ratio={1 / 1} bg={'gray.100'}>
+                    {item.images.length > 0 ? (
+                      <Image alt={item.name} src={item.images[0].url} objectFit='cover' />
+                    ) : (
+                      <Box />
+                    )}
                   </AspectRatio>
                   {item.name}
                 </Box>
