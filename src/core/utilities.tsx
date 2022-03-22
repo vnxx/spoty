@@ -1,5 +1,6 @@
 import { serialize, CookieSerializeOptions } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { NextRouter } from 'next/router';
 const querystring = require('querystring');
 
 export function generateRandomString(length: number): string {
@@ -55,10 +56,8 @@ export const getAccessToken = async (req: NextApiRequest) => {
 };
 
 export const fetcher = (url: string) => fetch(url).then(async (res) => {
-
 	if (!res.ok) {
 		const error: any = new Error('An error occurred while fetching the data.')
-		// Attach extra info to the error object.
 		error.info = await res.json()
 		error.status = res.status
 
@@ -67,3 +66,17 @@ export const fetcher = (url: string) => fetch(url).then(async (res) => {
 
 	return res.json()
 });
+
+export const clientErrorCheck = (error: any, router: NextRouter) => {
+	switch (error.status) {
+		case 401:
+			router.push('/api/spotify/login')
+			break;
+
+		case 500:
+			return <div>Your email account is not registerd on this app.</div>
+
+		default:
+			return <div>{error.message}</div>
+	}
+}

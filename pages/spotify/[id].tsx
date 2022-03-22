@@ -1,7 +1,7 @@
 import AuthLayout from "../../src/components/layouts/AuthLayout";
 import { apiPlaylistShowType, Item } from "../../src/types/apiType";
 import { useRouter } from 'next/router'
-import { fetcher } from "../../src/core/utilities";
+import { clientErrorCheck, fetcher } from "../../src/core/utilities";
 import useSWR from "swr";
 import {
 	Box,
@@ -33,11 +33,7 @@ export default function SpotifyShow() {
 	const toast = useToast()
 
 	if (error) {
-		if (error.status === 401) {
-			router.push('/api/spotify/login')
-		} else {
-			return <Box>{error.message}</Box>
-		}
+		clientErrorCheck(error, router)
 	}
 
 	if (!data) {
@@ -109,8 +105,12 @@ export default function SpotifyShow() {
 			<Box as='header' p={'8'} bg={'gray.100'}>
 				<Container d={'flex'} flexDir={['column', 'row']} gap={['2', '8']}>
 					<Box flex={'none'} w={'200px'}>
-						<AspectRatio mb={2} ratio={1 / 1}>
-							<Image alt={data.name} src={data.images[0].url} objectFit='cover' />
+						<AspectRatio mb={2} ratio={1 / 1} bg={'gray.200'} shadow={'lg'}>
+							{data.images.length > 0 ? (
+								<Image alt={data.name} src={data.images[0].url} objectFit='cover' />
+							) : (
+								<Box />
+							)}
 						</AspectRatio>
 					</Box>
 
@@ -128,7 +128,7 @@ export default function SpotifyShow() {
 				<Container>
 					<Stack spacing={'4'}>
 						{data.tracks.items.map((item, i) => (
-							<Box key={i} bg={'gray.100'} d={'flex'}>
+							<Box shadow={'sm'} key={i} bg={'gray.100'} d={'flex'}>
 								<Box flex={'none'} w={'100px'} h={'100px'}>
 									<AspectRatio mb={2} ratio={1 / 1}>
 										<Image alt={item.track.name} src={item.track.album.images[0].url} objectFit='cover' />

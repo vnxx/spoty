@@ -4,7 +4,7 @@ import Container from '../src/components/Container';
 import AuthLayout from '../src/components/layouts/AuthLayout'
 import { apiMeType, apiPlaylistIndexType } from '../src/types/apiType'
 import Link from 'next/link'
-import { fetcher } from '../src/core/utilities';
+import { clientErrorCheck, fetcher } from '../src/core/utilities';
 import { useRouter } from 'next/router'
 
 export default function Home() {
@@ -13,11 +13,7 @@ export default function Home() {
   const router = useRouter()
 
   if (profileError) {
-    if (profileError.status === 401) {
-      router.push('/api/spotify/login')
-    } else {
-      return <Box>{profileError.message}</Box>
-    }
+    clientErrorCheck(profileError, router)
   }
 
   if (!profile) {
